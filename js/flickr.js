@@ -14,19 +14,33 @@ class MyFlickr {
     this.wrap = wrap;
   }
 
-  //선택된 타입과 옵션에 따라서 url 반환 메서드
+  //url에 따라서 fetching data반환 메서드
   async fetchData() {
     const baseURL =
-      "https://www.flickr.com/services/rest/?format=json&nojsoncallback=1";
+      "https://www.flickr.com/services/rest/?format=json&nojsoncallback=1&method=";
     const method_interest = "flickr.interestingness.getList";
     const url = `${baseURL}${method_interest}&api_key=${this.opt.api_key}&per_page=${this.opt.num}`;
 
     const data = await fetch(url);
     const json = await data.json();
     console.log(json.photos.photo);
+
+    this.createList(json.photos.photo);
   }
 
-  //url에 따라서 fetching date 반환 메서드
+  //fetching데이터에 따라 동적 목록 생성 메서드
+  createList(arr) {
+    let tags = "";
 
-  //fetching data에 따라 동적 목록 생성 메서드
+    arr.forEach((item) => {
+      tags += `
+        <li class='item'>
+          <img src='https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_m.jpg' />
+          <h2>${item.title}</h2>
+        </li>
+      `;
+    });
+
+    this.wrap.innerHTML = tags;
+  }
 }
