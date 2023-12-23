@@ -10,7 +10,17 @@
 </head>
 
 <body>
+  <section class="gallery"></section>
 
+  <script>
+    const gallery = document.querySelector('.gallery');
+
+    const instance = new MyFlickr(gallery, {
+      api_key: '8b64c130239af91c4db3e4d01e67033b',
+      num: 20,
+      myId: '1993361154@N05',
+    });
+  </script>
 </body>
 
 </html>
