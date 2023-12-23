@@ -2,6 +2,7 @@ class MyFlickr {
   constructor(selector, option) {
     this.selector = selector;
     this.opt = option;
+    this.type = option.type;
 
     this.createInit();
     this.fetchData();
@@ -9,7 +10,7 @@ class MyFlickr {
 
   //필수 DOM생성 메서드
   createInit() {
-    const wrap = document.createElement("ul");
+    const wrap = document.createElement(this.type);
     this.selector.append(wrap);
     this.wrap = wrap;
   }
@@ -27,18 +28,27 @@ class MyFlickr {
 
     this.createList(json.photos.photo);
   }
-
   //fetching데이터에 따라 동적 목록 생성 메서드
   createList(arr) {
     let tags = "";
 
     arr.forEach((item) => {
-      tags += `
-        <li class='item'>
-          <img src='https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_m.jpg' />
-          <h2>${item.title}</h2>
-        </li>
-      `;
+      if (this.type === "ul") {
+        tags += `
+      <li class='item'>
+        <img src='https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_m.jpg' />
+        <h2>${item.title}</h2>
+      </li>
+    `;
+      }
+      if (this.type === "section") {
+        tags += `
+      <article class='item'>
+        <img src='https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_m.jpg' />
+        <h2>${item.title}</h2>
+      </article>
+    `;
+      }
     });
 
     this.wrap.innerHTML = tags;
