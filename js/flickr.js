@@ -4,9 +4,8 @@ class MyFlickr {
     this.opt = option;
     this.tag = option.tag;
     this.myId = option.myId;
-
     this.createInit();
-    this.fetchData();
+    this.bindingEvent();
   }
 
   //필수 DOM생성 메서드
@@ -17,6 +16,20 @@ class MyFlickr {
     this.selector.append(wrap);
     this.wrap = wrap;
     this.childTag = childEl;
+  }
+
+  //이벤트 바인딩 메서드 (버튼클릭)
+  bindingEvent() {
+    this.fetchData(this.getURL("user", this.myId));
+    //로딩이벤트
+    const [btnMine, btnInterest] = this.selector.querySelectorAll("button");
+    //btn 클릭 이벤트
+    btnMine.addEventListener("click", () =>
+      this.fetchData(this.getURL("user", this.myId))
+    );
+    btnInterest.addEventListener("click", () =>
+      this.fetchData(this.getURL("interest"))
+    );
   }
 
   getURL(type, opt) {
@@ -34,10 +47,11 @@ class MyFlickr {
   }
 
   //url에 따라서 fetching data반환 메서드
-  async fetchData() {
-    const data = await fetch(this.getURL("user", this.myId));
+  async fetchData(url) {
+    console.log(url);
+    const data = await fetch(url);
+    //const data = await fetch(this.getURL('search', 'ocean'));
     const json = await data.json();
-
     this.createList(json.photos.photo);
   }
 
