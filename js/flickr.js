@@ -20,9 +20,12 @@ class MyFlickr {
 
   //이벤트 바인딩 메서드 (버튼클릭)
   bindingEvent() {
-    this.fetchData(this.getURL("user", this.myId));
-    //로딩이벤트
     const [btnMine, btnInterest] = this.selector.querySelectorAll("button");
+    const form = this.selector.querySelector("form");
+
+    //로딩이벤트
+    this.fetchData(this.getURL("user", this.myId));
+
     //btn 클릭 이벤트
     btnMine.addEventListener("click", () =>
       this.fetchData(this.getURL("user", this.myId))
@@ -30,6 +33,14 @@ class MyFlickr {
     btnInterest.addEventListener("click", () =>
       this.fetchData(this.getURL("interest"))
     );
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      console.log(e);
+      const tag = e.currentTarget.querySelectorAll("input")[0].value;
+      if (tag.trim() === "") return alert("검색어를 입력하세요.");
+      this.fetchData(this.getURL("search", tag));
+      e.currentTarget.querySelectorAll("input")[0].value = "";
+    });
   }
 
   getURL(type, opt) {
