@@ -4,6 +4,8 @@ class MyFlickr {
     this.opt = option;
     this.tag = option.tag;
     this.myId = option.myId;
+    this.search = option.search;
+    this.interest = option.interest;
     this.createInit();
     this.bindingEvent();
   }
@@ -24,7 +26,8 @@ class MyFlickr {
       <input type="submit" value="search"/>
     `;
 
-    this.selector.append(nav, form, wrap);
+    this.interest && this.selector.append(nav);
+    this.search && this.selector.append(form);
     this.selector.append(wrap);
 
     this.wrap = wrap;
@@ -40,20 +43,23 @@ class MyFlickr {
     this.fetchData(this.getURL("user", this.myId));
 
     //btn 클릭 이벤트
-    btnMine.addEventListener("click", () =>
-      this.fetchData(this.getURL("user", this.myId))
-    );
-    btnInterest.addEventListener("click", () =>
-      this.fetchData(this.getURL("interest"))
-    );
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      console.log(e);
-      const tag = e.currentTarget.querySelectorAll("input")[0].value;
-      if (tag.trim() === "") return alert("검색어를 입력하세요.");
-      this.fetchData(this.getURL("search", tag));
-      e.currentTarget.querySelectorAll("input")[0].value = "";
-    });
+    this.interest &&
+      btnMine.addEventListener("click", () =>
+        this.fetchData(this.getURL("user", this.myId))
+      );
+    this.interest &&
+      btnInterest.addEventListener("click", () =>
+        this.fetchData(this.getURL("interest"))
+      );
+    this.search &&
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        console.log(e);
+        const tag = e.currentTarget.querySelectorAll("input")[0].value;
+        if (tag.trim() === "") return alert("검색어를 입력하세요.");
+        this.fetchData(this.getURL("search", tag));
+        e.currentTarget.querySelectorAll("input")[0].value = "";
+      });
   }
 
   getURL(type, opt) {
