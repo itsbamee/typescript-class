@@ -28,27 +28,20 @@ class MyFlickr {
 
     this.createList(json.photos.photo);
   }
+
   //fetching데이터에 따라 동적 목록 생성 메서드
   createList(arr) {
     let tags = "";
 
     arr.forEach((item) => {
-      if (this.type === "ul") {
-        tags += `
-      <li class='item'>
-        <img src='https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_m.jpg' />
+      tags += `
+      <${this.type === "ul" ? "li" : "article"} class='item'>
+        <img src='https://live.staticflickr.com/${item.server}/${item.id}_${
+        item.secret
+      }_m.jpg' />
         <h2>${item.title}</h2>
-      </li>
+      <${this.type === "ul" ? "li" : "article"}>
     `;
-      }
-      if (this.type === "section") {
-        tags += `
-      <article class='item'>
-        <img src='https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_m.jpg' />
-        <h2>${item.title}</h2>
-      </article>
-    `;
-      }
     });
 
     this.wrap.innerHTML = tags;
