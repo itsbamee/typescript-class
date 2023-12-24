@@ -12,7 +12,6 @@ class MyFlickr {
   createInit() {
     const [parentEl, childEl] = this.type.split(">");
     const wrap = document.createElement(parentEl);
-    const item = document.createElement(childEl);
 
     this.selector.append(wrap);
     this.wrap = wrap;
@@ -39,11 +38,11 @@ class MyFlickr {
 
     arr.forEach((item) => {
       tags += `
-      <${this.childTag} class='item'>
-        <img src='https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_m.jpg' />
-        <h2>${item.title}</h2>
-      <${this.childTag}>
-    `;
+        <${this.childTag} class='item'>
+          <img src='https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_m.jpg' />
+          <h2>${item.title}</h2>
+        </${this.childTag}>
+      `;
     });
 
     this.wrap.innerHTML = tags;
