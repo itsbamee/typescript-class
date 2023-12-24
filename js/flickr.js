@@ -12,8 +12,21 @@ class MyFlickr {
   createInit() {
     const [parentEl, childEl] = this.tag.split(">");
     const wrap = document.createElement(parentEl);
+    const nav = document.createElement("nav");
+    const form = document.createElement("form");
+    nav.innerHTML = `
+      <button>My Gallery</button>
+      <button>Interest Gallery</button>
+    `;
 
+    form.innerHTML = `
+      <input type="text"/>
+      <input type="submit" value="search"/>
+    `;
+
+    this.selector.append(nav, form, wrap);
     this.selector.append(wrap);
+
     this.wrap = wrap;
     this.childTag = childEl;
   }
