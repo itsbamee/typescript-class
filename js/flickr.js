@@ -10,9 +10,13 @@ class MyFlickr {
 
   //필수 DOM생성 메서드
   createInit() {
-    const wrap = document.createElement(this.type);
+    const [parentEl, childEl] = this.type.split(">");
+    const wrap = document.createElement(parentEl);
+    const item = document.createElement(childEl);
+
     this.selector.append(wrap);
     this.wrap = wrap;
+    this.childTag = childEl;
   }
 
   //url에 따라서 fetching data반환 메서드
@@ -35,12 +39,10 @@ class MyFlickr {
 
     arr.forEach((item) => {
       tags += `
-      <${this.type === "ul" ? "li" : "article"} class='item'>
-        <img src='https://live.staticflickr.com/${item.server}/${item.id}_${
-        item.secret
-      }_m.jpg' />
+      <${this.childTag} class='item'>
+        <img src='https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_m.jpg' />
         <h2>${item.title}</h2>
-      <${this.type === "ul" ? "li" : "article"}>
+      <${this.childTag}>
     `;
     });
 
