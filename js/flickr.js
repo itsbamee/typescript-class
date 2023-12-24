@@ -1,11 +1,19 @@
 class MyFlickr {
+  #defOpt = {
+    api_key: "8b64c130239af91c4db3e4d01e67033b",
+    num: 20,
+    myId: "199361154@N05",
+    tag: "ul>li",
+    interest: true,
+    search: true,
+  };
   constructor(selector, option) {
     this.selector = selector;
-    this.opt = option;
-    this.tag = option.tag;
-    this.myId = option.myId;
-    this.search = option.search;
-    this.interest = option.interest;
+    this.opt = { ...this.#defOpt, ...option };
+    this.tag = this.opt.tag;
+    this.myId = this.opt.myId;
+    this.search = this.opt.search;
+    this.interest = this.opt.interest;
     this.createInit();
     this.bindingEvent();
   }

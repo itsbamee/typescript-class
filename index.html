@@ -15,14 +15,7 @@
   <script>
     const gallery = document.querySelector('.gallery');
 
-    const instance = new MyFlickr(gallery, {
-      api_key: '8b64c130239af91c4db3e4d01e67033b',
-      num: 20,
-      myId: '199361154@N05',
-      tag: 'ul>li',
-      interest: true,
-      search: true
-    });
+    const instance = new MyFlickr(gallery, { search: false, interest: false, tag: 'ul>li' });
 
     console.log(instance);
     //instance.createInit();
