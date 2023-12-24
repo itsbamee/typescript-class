@@ -2,7 +2,8 @@ class MyFlickr {
   constructor(selector, option) {
     this.selector = selector;
     this.opt = option;
-    this.type = option.type;
+    this.tag = option.tag;
+    this.myId = option.myId;
 
     this.createInit();
     this.fetchData();
@@ -10,7 +11,7 @@ class MyFlickr {
 
   //필수 DOM생성 메서드
   createInit() {
-    const [parentEl, childEl] = this.type.split(">");
+    const [parentEl, childEl] = this.tag.split(">");
     const wrap = document.createElement(parentEl);
 
     this.selector.append(wrap);
@@ -18,16 +19,24 @@ class MyFlickr {
     this.childTag = childEl;
   }
 
-  //url에 따라서 fetching data반환 메서드
-  async fetchData() {
+  getURL(type, opt) {
     const baseURL =
       "https://www.flickr.com/services/rest/?format=json&nojsoncallback=1&method=";
     const method_interest = "flickr.interestingness.getList";
-    const url = `${baseURL}${method_interest}&api_key=${this.opt.api_key}&per_page=${this.opt.num}`;
+    const method_user = "flickr.people.getPhotos";
+    const method_search = "flickr.photos.search";
+    if (type === "interest")
+      return `${baseURL}${method_interest}&api_key=${this.opt.api_key}&per_page=${this.opt.num}`;
+    if (type === "search")
+      return `${baseURL}${method_search}&api_key=${this.opt.api_key}&per_page=${this.opt.num}&tags=${opt}`;
+    if (type === "user")
+      return `${baseURL}${method_user}&api_key=${this.opt.api_key}&per_page=${this.opt.num}&user_id=${opt}`;
+  }
 
-    const data = await fetch(url);
+  //url에 따라서 fetching data반환 메서드
+  async fetchData() {
+    const data = await fetch(this.getURL("user", this.myId));
     const json = await data.json();
-    console.log(json.photos.photo);
 
     this.createList(json.photos.photo);
   }
