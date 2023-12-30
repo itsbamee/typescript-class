@@ -49,12 +49,14 @@ class MyFlickr {
         this.interest && ((_a = this.selector) === null || _a === void 0 ? void 0 : _a.append(nav));
         this.search && ((_b = this.selector) === null || _b === void 0 ? void 0 : _b.append(form));
         (_c = this.selector) === null || _c === void 0 ? void 0 : _c.append(wrap);
-        this.wrap && (this.wrap = wrap);
+        this.wrap = wrap;
         this.childTag = childEl;
     }
     bindingEvent() {
         var _a, _b;
-        const [btnMine, btnInterest] = (_a = this.selector) === null || _a === void 0 ? void 0 : _a.querySelectorAll('button');
+        const btns = (_a = this.selector) === null || _a === void 0 ? void 0 : _a.querySelectorAll('button');
+        const btnMine = btns[0];
+        const btnInterest = btns[1];
         const form = (_b = this.selector) === null || _b === void 0 ? void 0 : _b.querySelector('form');
         this.fetchData(this.getURL('user', this.myId));
         this.interest && btnMine.addEventListener('click', () => this.fetchData(this.getURL('user', this.myId)));
@@ -71,7 +73,8 @@ class MyFlickr {
                 eTarget.querySelectorAll('input')[0].value = '';
             }));
     }
-    getURL(type, opt) {
+    //interest타입의 경우는 2번째 인수값이 없으므로 info파라미터를 optional처리
+    getURL(type, info) {
         const baseURL = 'https://www.flickr.com/services/rest/?format=json&nojsoncallback=1&method=';
         const method_interest = 'flickr.interestingness.getList';
         const method_user = 'flickr.people.getPhotos';
@@ -79,9 +82,12 @@ class MyFlickr {
         if (type === 'interest')
             return `${baseURL}${method_interest}&api_key=${this.opt.api_key}&per_page=${this.opt.num}`;
         if (type === 'search')
-            return `${baseURL}${method_search}&api_key=${this.opt.api_key}&per_page=${this.opt.num}&tags=${opt}`;
+            return `${baseURL}${method_search}&api_key=${this.opt.api_key}&per_page=${this.opt.num}&tags=${info}`;
         if (type === 'user')
-            return `${baseURL}${method_user}&api_key=${this.opt.api_key}&per_page=${this.opt.num}&user_id=${opt}`;
+            return `${baseURL}${method_user}&api_key=${this.opt.api_key}&per_page=${this.opt.num}&user_id=${info}`;
+        //else문으로 해당 조건문을 끝내야 getURL의 반환값에 undefined가 들어가지 않음
+        else
+            return;
     }
     fetchData(url) {
         return __awaiter(this, void 0, void 0, function* () {

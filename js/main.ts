@@ -68,18 +68,21 @@ class MyFlickr {
 		this.search && this.selector?.append(form);
 		this.selector?.append(wrap);
 
-		this.wrap && (this.wrap = wrap);
+		this.wrap = wrap;
 		this.childTag = childEl;
 	}
 
 	bindingEvent() {
-		const [btnMine, btnInterest] = this.selector?.querySelectorAll('button');
+		const btns = this.selector?.querySelectorAll('button');
+		const btnMine: HTMLButtonElement | undefined = btns[0];
+		const btnInterest: HTMLButtonElement | undefined = btns[1];
 		const form = this.selector?.querySelector('form');
 
 		this.fetchData(this.getURL('user', this.myId));
 
 		this.interest && btnMine.addEventListener('click', () => this.fetchData(this.getURL('user', this.myId)));
 		this.interest && btnInterest.addEventListener('click', () => this.fetchData(this.getURL('interest')));
+
 		this.search &&
 			form?.addEventListener('submit', (e: Event) => {
 				e.preventDefault();
@@ -92,16 +95,19 @@ class MyFlickr {
 			});
 	}
 
-	getURL(type: string, opt?: string | undefined) {
+	//interest타입의 경우는 2번째 인수값이 없으므로 info파라미터를 optional처리
+	getURL(type: string, info?: string) {
 		const baseURL = 'https://www.flickr.com/services/rest/?format=json&nojsoncallback=1&method=';
 		const method_interest = 'flickr.interestingness.getList';
 		const method_user = 'flickr.people.getPhotos';
 		const method_search = 'flickr.photos.search';
 		if (type === 'interest') return `${baseURL}${method_interest}&api_key=${this.opt.api_key}&per_page=${this.opt.num}`;
 		if (type === 'search')
-			return `${baseURL}${method_search}&api_key=${this.opt.api_key}&per_page=${this.opt.num}&tags=${opt}`;
+			return `${baseURL}${method_search}&api_key=${this.opt.api_key}&per_page=${this.opt.num}&tags=${info}`;
 		if (type === 'user')
-			return `${baseURL}${method_user}&api_key=${this.opt.api_key}&per_page=${this.opt.num}&user_id=${opt}`;
+			return `${baseURL}${method_user}&api_key=${this.opt.api_key}&per_page=${this.opt.num}&user_id=${info}`;
+		//else문으로 해당 조건문을 끝내야 getURL의 반환값에 undefined가 들어가지 않음
+		else return;
 	}
 
 	async fetchData(url: string) {
